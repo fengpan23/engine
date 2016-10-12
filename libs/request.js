@@ -45,7 +45,7 @@ class Request extends Event{
             this._buffer.response[name] = this._buffer.response.hasOwnProperty(name) ? _.extend(this._buffer.response[name], data) : data;
 
         if(immediately)
-            this._send('response');
+            this._sendResponseData();
     }
 
     /**
@@ -60,7 +60,7 @@ class Request extends Event{
             this._buffer.broadcast[name] = this._buffer.broadcast.hasOwnProperty(name) ? _.extend(this._buffer.broadcast[name], data) : data;
 
         if(immediately)
-            this._send('broadcast');
+            this._sendBroadcastData();
     }
 
     /**
@@ -69,32 +69,24 @@ class Request extends Event{
      */
     close(exit) {
         this.emit('beforeClose');
-        this._send();
+        this._sendResponseData();
+        this._sendBroadcastData();
         this.emit('afterClose');
 
         if (!!exit)
             this._client.close();
     }
 
-    /**
-     * 发送数据
-     * @param type  broadcast ，response or null
-     * @private
-     */
-    _send(type) {
-        switch (type){
-            case 'broadcast':
-                this.emit('broadcast', this._client.id,  this._buffer.broadcast);
-                this._buffer.broadcast = {};
-                break;
-            case 'response':
-                this._client.send({action: this.getAttribute('action'), data: this._buffer.response});
-                this._buffer.response = {};
-                break;
-            default:
-                this.emit('broadcast', this._client.id,  this._buffer.broadcast);
-                this._client.send({action: this.getAttribute('action'), data: this._buffer.response});
-                this._buffer = {response: {}, broadcast: {}};
+    _sendBroadcastData(){
+        if(!_.isEmpty(this._buffer.broadcast)){
+            this.emit('broadcast', this._client.id,  this._buffer.broadcast);
+            this._buffer.broadcast = {};
+        }
+    }
+    _sendResponseData(){
+        if(!_.isEmpty(this._buffer.broadcast)) {
+            this._client.send({action: this.getAttribute('action'), data: this._buffer.response});
+            this._buffer.response = {};
         }
     }
 }
