@@ -53,7 +53,7 @@ class Index extends Event{
     }
 
     getPlayers(){
-        
+        return [...this._clients.values()];
     }
 
     out(){
