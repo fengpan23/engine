@@ -15,7 +15,7 @@ class Index extends Event{
 
     start(opt) {
         let server = Connect.createServer(opt);
-        server.on('connect', client => {
+        server.on('connected', client => {
             this._clients.set(client.id, client);
         }).on('request', (client, content) => {
             let request = new Request(client, content);
