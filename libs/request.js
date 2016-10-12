@@ -5,18 +5,18 @@ class Request extends Event{
     constructor(client, action, params, timeout) {
         super();
 
-        this._action = action;
-        this._client = client;
-        this._params = params;
-        this._timeout = timeout;
+        this.action = action;
+        this.params = params;
 
+        this._client = client;
+        this._timeout = timeout;
         this._initBuffer();
     }
 
     _initBuffer(){
         this._buffer = {};
-        this._buffer.response = {action: this._action, status: 'ok', error: null, data: []};
-        this._buffer.broadcast = {action: 'broadcast_' + this._action, status: 'ok', error: null, data: [] };
+        this._buffer.response = {action: this.action, status: 'ok', error: null, data: []};
+        this._buffer.broadcast = {action: 'broadcast_' + this.action, status: 'ok', error: null, data: [] };
     }
 
     attribute(name){
