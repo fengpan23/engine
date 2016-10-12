@@ -2,7 +2,7 @@
  * Created by fengpan23@qq.com on 2016/8/4.
  */
 "use strict";
-const Event = require('event');
+const Event = require('events');
 const Connect = require('connect');
 
 const Request = require('./libs/request');
