@@ -9,6 +9,7 @@ const Request = require('./libs/request');
 
 class Index extends Event{
     constructor(opt) {
+        super();
         this._clients = new Map();
     }
 
