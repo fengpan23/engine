@@ -18,6 +18,6 @@
   "author": "fengpan",
   "license": "ISC",
   "dependencies": {
-    "connect": "git+https://pan.feng:fengpan123@gitlab.stargt.com.my/pan.feng/connect.git"
+    "connect": "git+https://pan.feng:fengpan123@github.com/fengpan23/connect.git"
   }
 }
