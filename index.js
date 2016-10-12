@@ -8,13 +8,13 @@ const Connect = require('connect');
 const Request = require('./libs/request');
 
 class Index extends Event{
-    constructor(opt) {
+    constructor() {
         super();
         this._clients = new Map();
     }
 
-    start() {
-        let server = Connect.createServer();
+    start(opt) {
+        let server = Connect.createServer(opt);
         server.on('connect', client => {
             this._clients.set(client.id, client);
         }).on('request', (client, content) => {
