@@ -65,16 +65,16 @@ class Request extends Event{
 
     /**
      * close request
-     * @param exit  if this param is true, server close this client socket
+     * @param error  if had this param, send this error and close this client socket
      */
-    close(exit) {
-        this.emit('beforeClose');
+    close(error) {
+        this.emit('beforeClose', error);
         this._sendResponseData();
         this._sendBroadcastData();
-        this.emit('afterClose');
+        this.emit('afterClose', error);
 
-        if (!!exit)
-            this._client.close();
+        if (!!error)
+            this._client.close(error);
     }
 
     _sendBroadcastData(){
@@ -83,6 +83,7 @@ class Request extends Event{
             this._buffer.broadcast = {};
         }
     }
+
     _sendResponseData(){
         if(!_.isEmpty(this._buffer.response)) {
             this._client.send({action: this.getAttribute('event'), data: this._buffer.response});

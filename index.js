@@ -5,11 +5,14 @@
 const Event = require('events');
 const Connect = require('connect');
 
+const Log = require('log');
 const Request = require('./libs/request');
 
 class Index extends Event{
     constructor() {
         super();
+
+        new Log({develop: true});       //create global log
         this._clients = new Map();
     }
 
@@ -36,28 +39,8 @@ class Index extends Event{
         }
     }
 
-    login(){
-
-    }
-
-    seat(request){
-
-    }
-
-    move(){
-
-    }
-
-    open(){
-
-    }
-
-    getPlayers(){
+    getClients(){
         return [...this._clients.values()];
-    }
-
-    out(){
-
     }
 
     close(){
@@ -65,18 +48,6 @@ class Index extends Event{
     }
 
     exit(){
-
-    }
-
-    buy(){
-
-    }
-
-    bet(){
-
-    }
-
-    win(){
 
     }
 }
