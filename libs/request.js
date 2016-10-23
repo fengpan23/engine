@@ -3,9 +3,9 @@ const _ = require('underscore');
 const Event = require('events');
 
 class Request extends Event{
-    constructor(client, content, timeout) {
+    constructor(client, params, timeout) {
         super();
-        this.content = content;     //client send data object json
+        this.params = params;     //client send data object json
 
         this._client = client;
         this._timeout = timeout;
@@ -47,7 +47,7 @@ class Request extends Event{
      * @returns {*}
      */
     getParams(name){
-        let names = [], value = this.content;
+        let names = [], value = this.params;
         if(name)
             names = name.split('.');
 
