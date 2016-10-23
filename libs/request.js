@@ -14,11 +14,39 @@ class Request extends Event{
     }
 
     /**
-     * get attribute
+     * set value to client
+     * @param key   {String}
+     * @param value {*}
+     * @return Boolean
+     */
+    set(key, value){
+        if(key){
+            if(typeof key === 'object'){
+                for(let k in key){
+                    this.set(k, key[k]);
+                }
+            }else{
+                this._client[key] = value;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * get before set value
+     * @param key   {String}
+     */
+    get(key){
+        this._client[key];
+    }
+
+    /**
+     * get params    (获取传人参数)
      * @param name  eg： 'content.action'
      * @returns {*}
      */
-    getAttribute(name){
+    getParams(name){
         let names = [], value = this.content;
         if(name)
             names = name.split('.');
