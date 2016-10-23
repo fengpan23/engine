@@ -38,7 +38,7 @@ class Request extends Event{
      * @param key   {String}
      */
     get(key){
-        this._client[key];
+        return this._client[key];
     }
 
     /**
