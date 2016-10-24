@@ -128,7 +128,7 @@ class Request extends Event{
 
     _sendResponseData(){
         if(!_.isEmpty(this._buffer.response)) {
-            this._client.send({action: this.getAttribute('event'), data: this._buffer.response});
+            this._client.send({action: this.getParams('event'), data: this._buffer.response});
             this._buffer.response = {};
         }
     }

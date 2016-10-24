@@ -39,6 +39,7 @@ class Index extends Event{
      * @param omit  {array} omit client ids
      */
     broadcast(data, omit){
+        console.log('engine broadcast', data, omit);
         let o = new Set(omit);
         for(let key of this._clients){
             if(!o.has(key)){
