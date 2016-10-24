@@ -47,8 +47,19 @@ class Index extends Event{
         }
     }
 
-    getClients(){
-        return [...this._clients.values()];
+    /**
+     * get clients
+     * @param ids
+     * @returns {*}
+     */
+    getClients(ids){
+        let clients = [];
+        if(ids){
+            for(let id in ids){
+                this._clients.has(id) && clients.push(this._clients.get(id));
+            }
+        }
+        return clients.length > 0 ? clients : [...this._clients.values()];
     }
 
     close(){
