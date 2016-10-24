@@ -19,12 +19,17 @@ class Index extends Event{
     start(opt) {
         let server = Connect.createServer(opt);
         server.on('connected', client => {
-            this._clients.set(client.id, client);
-        }).on('request', (client, content) => {
-            let request = new Request(client, content);
-            request.on('broadcast', this.broadcast.bind(this));
 
-            this.emit('request', request);
+            client.on('data', content => {
+                let request = new Request(client, content);
+                request.on('broadcast', this.broadcast.bind(this));
+
+                this.emit('request', request);
+            });
+
+            this._clients.set(client.id, client);
+        }).on('error', e => {
+            Log.error('engine server error', e);
         });
     }
 

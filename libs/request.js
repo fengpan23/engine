@@ -3,9 +3,9 @@ const _ = require('underscore');
 const Event = require('events');
 
 class Request extends Event{
-    constructor(client, content, timeout) {
+    constructor(client, params, timeout) {
         super();
-        this.content = content;     //client send data object json
+        this.params = params;     //client send data object json
 
         this._client = client;
         this._timeout = timeout;
@@ -14,12 +14,40 @@ class Request extends Event{
     }
 
     /**
-     * get attribute
+     * set value to client
+     * @param key   {String}
+     * @param value {*}
+     * @return Boolean
+     */
+    set(key, value){
+        if(key){
+            if(typeof key === 'object'){
+                for(let k in key){
+                    this.set(k, key[k]);
+                }
+            }else{
+                this._client[key] = value;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * get before set value
+     * @param key   {String}
+     */
+    get(key){
+        return this._client[key];
+    }
+
+    /**
+     * get params    (获取传人参数)
      * @param name  eg： 'content.action'
      * @returns {*}
      */
-    getAttribute(name){
-        let names = [], value = this.content;
+    getParams(name){
+        let names = [], value = this.params;
         if(name)
             names = name.split('.');
 
