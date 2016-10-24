@@ -121,7 +121,7 @@ class Request extends Event{
 
     _sendBroadcastData(){
         if(!_.isEmpty(this._buffer.broadcast)){
-            this.emit('broadcast', this._client.id,  this._buffer.broadcast);
+            this.emit('broadcast', this._buffer.broadcast, [this._client.id]);
             this._buffer.broadcast = {};
         }
     }

@@ -2,24 +2,22 @@
  * Created by fengpan23@qq.com on 2016/8/4.
  */
 "use strict";
+const _ = require('underscore');
 const Event = require('events');
 const Connect = require('connect');
 
-const Log = require('log');
+const Log = require('log')({develop: true});    //create global log
 const Request = require('./libs/request');
 
 class Index extends Event{
     constructor() {
         super();
-
-        new Log({develop: true});       //create global log
         this._clients = new Map();
     }
 
     start(opt) {
         let server = Connect.createServer(opt);
         server.on('connected', client => {
-
             client.on('data', content => {
                 let request = new Request(client, content);
                 request.on('broadcast', this.broadcast.bind(this));
@@ -36,14 +34,19 @@ class Index extends Event{
     /**
      * broadcast data
      * @param data
-     * @param omit  {array} omit client ids
+     * @param omit  {array} omit client ids (除去这些client id)
+     * @param limit  {array} limit client ids  (只发送这些client)
      */
-    broadcast(data, omit){
-        console.log('engine broadcast', data, omit);
-        let o = new Set(omit);
-        for(let key of this._clients){
-            if(!o.has(key)){
-                this._clients[key].send(data);
+    broadcast(data, omit, limit){
+        if(_.isArray(limit)){
+            for(let id in limit)
+                this._clients.has(id) && this._clients.get(id).send(data);
+        }else{
+            let o = new Set(omit);
+            for(let [id, client] of this._clients){
+                if(!o.has(id)){
+                    client.send(data);
+                }
             }
         }
     }
