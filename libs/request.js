@@ -92,6 +92,20 @@ class Request extends Event{
     }
 
     /**
+     * send error message
+     * @param code
+     * @param mess
+     */
+    error(code, mess){
+        this._sendResponseData();
+        this._sendBroadcastData();
+        this._buffer.response.status = 'error';
+        this._buffer.response.error = mess;
+        this._buffer.response.code = code;
+        this._sendResponseData();
+    }
+
+    /**
      * close request
      * @param error  if had this param, send this error and close this client socket
      */
