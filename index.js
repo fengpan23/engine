@@ -31,11 +31,14 @@ class Index extends Event{
     /**
      * broadcast data
      * @param data
-     * @param omit  {array} omit client id
+     * @param omit  {array} omit client ids
      */
     broadcast(data, omit){
-        for(let client of this._clients){
-            client.send();
+        let o = new Set(omit);
+        for(let key of this._clients){
+            if(!o.has(key)){
+                this._clients[key].send(data);
+            }
         }
     }
 
