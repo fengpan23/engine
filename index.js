@@ -20,6 +20,7 @@ class Index extends Event{
         let CreateRequest = (client, content) => {
             let request = new Request(client, content);
             request.on('broadcast', this.broadcast.bind(this));
+            return request;
         };
 
         server.on('connected', client => {
