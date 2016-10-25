@@ -117,6 +117,7 @@ class Request extends Event{
 
         if (!!error)
             this._client.close(error);
+        this.removeAllListeners();
     }
 
     _sendBroadcastData(){
