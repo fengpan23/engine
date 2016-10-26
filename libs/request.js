@@ -14,31 +14,11 @@ class Request extends Event{
     }
 
     /**
-     * set value to client
-     * @param key   {String}
-     * @param value {*}
-     * @return Boolean
+     * get client id
+     * @return {Number}
      */
-    set(key, value){
-        if(key){
-            if(typeof key === 'object'){
-                for(let k in key){
-                    this.set(k, key[k]);
-                }
-            }else{
-                this._client[key] = value;
-            }
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * get before set value
-     * @param key   {String}
-     */
-    get(key){
-        return this._client[key];
+    getClientId(){
+        return this._client.id;
     }
 
     /**

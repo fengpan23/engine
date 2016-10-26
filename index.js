@@ -28,9 +28,9 @@ class Index extends Event{
                 this.emit('request', CreateRequest(client, content));
             });
             this._clients.set(client.id, client);
-        }).on('disconnect', client => {
-            this._clients.delete(client.id);
-            this.emit('disconnect', CreateRequest(client));
+        }).on('disconnect', id => {
+            this._clients.delete(id);
+            this.emit('disconnect', id);
         }).on('error', e => {
             Log.error('engine server error', e);
         });
