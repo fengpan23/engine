@@ -102,16 +102,29 @@ class Request extends Event{
 
     _sendBroadcastData(){
         if(!_.isEmpty(this._buffer.broadcast)){
-            this.emit('broadcast', this._buffer.broadcast, [this._client.id]);
+            this.emit('broadcast', this._packData('broadcast'), [this._client.id]);
             this._buffer.broadcast = {};
         }
     }
 
     _sendResponseData(){
         if(!_.isEmpty(this._buffer.response)) {
-            this._client.send({action: this.getParams('event'), data: this._buffer.response});
+            this._client.send(this._packData('response'));
             this._buffer.response = {};
         }
+    }
+
+    _packData(type){
+        let data = {content: _.extend({status: 'ok', error: null}, this._buffer[type])};
+        switch (type){
+            case 'broadcast':
+                data.event = type + '_' + this.getParams('event');
+                break;
+            case 'response':
+                data.event = this.getParams('event');
+                break;
+        }
+        return data;
     }
 }
 module.exports = Request;
