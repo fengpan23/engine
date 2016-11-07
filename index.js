@@ -67,8 +67,9 @@ class Index extends Event{
             for(let id in ids){
                 this._clients.has(id) && clients.push(this._clients.get(id));
             }
+            return clients;
         }
-        return clients.length > 0 ? clients : [...this._clients.values()];
+        return [...this._clients.values()];
     }
 
     close(){
