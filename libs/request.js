@@ -72,7 +72,7 @@ class Request extends Event{
     }
 
     /**
-     * send error message
+     * send error message     need emit close event ???
      * @param code
      * @param mess
      */
@@ -83,6 +83,7 @@ class Request extends Event{
         this._buffer.response.error = mess;
         this._buffer.response.code = code;
         this._sendResponseData();
+        this.removeAllListeners();
     }
 
     /**
@@ -93,11 +94,11 @@ class Request extends Event{
         this.emit('beforeClose', error);
         this._sendResponseData();
         this._sendBroadcastData();
-        this.emit('afterClose', error);
 
         if (!!error)
             this._client.close(error);
         this.removeAllListeners();
+        this.emit('afterClose', error);
     }
 
     _sendBroadcastData(){
