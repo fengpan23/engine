@@ -19,7 +19,7 @@ class Request extends Event{
      * @return {Number}
      */
     get clientId(){
-        return this._client.id;
+        return this._client && this._client.id;
     }
 
     /**

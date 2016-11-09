@@ -27,6 +27,8 @@ class Index extends Event{
         server.on('connected', client => {
             client.on('data', content => {
                 this.emit('request', CreateRequest(client, content));
+            }).on('reconnect', () => {
+                // this.emit('request', CreateRequest(client, content));
             });
             this._clients.set(client.id, client);
         }).on('disconnect', id => {
@@ -65,11 +67,13 @@ class Index extends Event{
      */
     getClients(ids){
         let clients = [];
-        if(ids){
+        if(_.isArray(ids)){
             for(let id in ids){
                 this._clients.has(id) && clients.push(this._clients.get(id));
             }
             return clients;
+        }else if(this._clients.has(ids)){
+            return this._clients.get(ids);
         }
         return [...this._clients.values()];
     }
