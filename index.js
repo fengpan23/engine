@@ -31,8 +31,8 @@ class Index extends Event{
         }).on('disconnect', id => {
             this._clients.delete(id);
             this.emit('disconnect', id);
-        }).on('error', e => {
-            Log.error('engine server error', e);
+        }).on('error', (e, hook)=> {
+            Log.error(hook, e);
         });
     }
 
