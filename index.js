@@ -32,7 +32,7 @@ class Index extends Event{
             this._clients.delete(id);
             this.emit('disconnect', id);
         }).on('error', (e, hook)=> {
-            Log.error(hook, e);
+            Log.error('hook: ' + hook, e);
         });
     }
 
