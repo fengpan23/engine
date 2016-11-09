@@ -7,6 +7,7 @@ const Event = require('events');
 const Connect = require('connect');
 
 const Log = require('log')({develop: true});    //create global log
+const Translate = require('./libs/translate');
 const Request = require('./libs/request');
 
 class Index extends Event{
@@ -31,18 +32,19 @@ class Index extends Event{
         }).on('disconnect', id => {
             this._clients.delete(id);
             this.emit('disconnect', id);
-        }).on('error', (e, hook)=> {
+        }).on('error', (e, hook) => {
             Log.error('hook: ' + hook, e);
         });
     }
 
     /**
      * broadcast data
-     * @param data
+     * @param content
      * @param omit  {array} omit client ids (除去这些client id)
      * @param limit  {array} limit client ids  (只发送这些client)
      */
-    broadcast(data, omit, limit){
+    broadcast(content, omit, limit){
+        let data = Translate.packBroadcast(content);
         if(_.isArray(limit)){
             for(let id in limit)
                 this._clients.has(id) && this._clients.get(id).send(data);

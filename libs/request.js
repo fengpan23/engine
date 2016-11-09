@@ -1,6 +1,7 @@
 "use strict";
 const _ = require('underscore');
 const Event = require('events');
+const Translate = require('./translate');
 
 class Request extends Event{
     constructor(client, params, timeout) {
@@ -79,9 +80,7 @@ class Request extends Event{
     error(code, mess){
         this._sendResponseData();
         this._sendBroadcastData();
-        this._buffer.response.status = 'error';
-        this._buffer.response.error = mess;
-        this._buffer.response.code = code;
+        this._buffer.response = {status:  'error', error: mess, code: code};
         this._sendResponseData();
         this.removeAllListeners();
     }
@@ -103,29 +102,16 @@ class Request extends Event{
 
     _sendBroadcastData(){
         if(!_.isEmpty(this._buffer.broadcast)){
-            this.emit('broadcast', this._packData('broadcast'), [this._client.id]);
+            this.emit('broadcast', Object.assign({event: this.getParams('event')}, this._buffer.broadcast), [this._client.id]);
             this._buffer.broadcast = {};
         }
     }
 
     _sendResponseData(){
         if(!_.isEmpty(this._buffer.response)) {
-            this._client.send(this._packData('response'));
+            this._client.send(Translate.packResponse(this._buffer.response, this.getParams('event')));
             this._buffer.response = {};
         }
-    }
-
-    _packData(type){
-        let data = {content: _.extend({status: 'ok', error: null}, this._buffer[type])};
-        switch (type){
-            case 'broadcast':
-                data.event = type + '_' + this.getParams('event');
-                break;
-            case 'response':
-                data.event = this.getParams('event');
-                break;
-        }
-        return data;
     }
 }
 module.exports = Request;
