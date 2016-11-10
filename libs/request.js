@@ -80,7 +80,7 @@ class Request extends Event{
     error(code, mess){
         this._sendResponseData();
         this._sendBroadcastData();
-        this._buffer.response = {status:  'error', error: mess, code: code};
+        this._buffer.response = {status: 'error', error: mess, code: code};
         this._sendResponseData();
         this.removeAllListeners();
     }

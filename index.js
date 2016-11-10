@@ -28,7 +28,9 @@ class Index extends Event{
             client.on('data', content => {
                 this.emit('request', CreateRequest(client, content));
             }).on('reconnect', () => {
-                // this.emit('request', CreateRequest(client, content));
+                //TODO: need replace socket ???
+                let content = {event: 'reconnect'};
+                this.emit('request', CreateRequest(client, content));
             });
             this._clients.set(client.id, client);
         }).on('disconnect', id => {
