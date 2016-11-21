@@ -3,12 +3,12 @@
  */
 
 class Translate{
-    static packBroadcast(content, event){
-        return Object.assign({status: 'ok', error: null, event: 'broadcast_' + event}, content);
+    static packBroadcast(content, action){
+        return {event: action, content: Object.assign({status: 'ok', error: null, debug: [], action: 'broadcast_' + action}, content)};
     }
 
-    static packResponse(content, event){
-        return Object.assign({status: 'ok', error: null, event: event}, content);
+    static packResponse(content, action){
+        return {event: action, content: Object.assign({status: 'ok', error: null, action: action}, content)};
     }
 }
 

@@ -1,4 +1,5 @@
 "use strict";
+const Log = require('log')();
 const _ = require('underscore');
 const Event = require('events');
 const Translate = require('./translate');
@@ -7,7 +8,6 @@ class Request extends Event{
     constructor(client, params, timeout) {
         super();
         this.params = params;     //client send data object json
-
         this._client = client;
         this._timeout = timeout;
 
@@ -37,7 +37,7 @@ class Request extends Event{
                 value = value[n];
                 continue;
             }
-            return value;
+            return undefined;
         }
         return value;
     }
@@ -80,7 +80,8 @@ class Request extends Event{
     error(code, mess){
         this._sendResponseData();
         this._sendBroadcastData();
-        this._buffer.response = {status: 'error', error: mess, code: code};
+        this._buffer.response = {status: 'error', error: code, mess: mess};
+        Log.error(`request ${this.getParams('event')} error: `, this._buffer.response);
         this._sendResponseData();
         this.removeAllListeners();
     }
@@ -102,7 +103,7 @@ class Request extends Event{
 
     _sendBroadcastData(){
         if(!_.isEmpty(this._buffer.broadcast)){
-            this.emit('broadcast', Object.assign({event: this.getParams('event')}, this._buffer.broadcast), [this._client.id]);
+            this.emit('broadcast', Object.assign({action: this.getParams('event')}, this._buffer.broadcast), [this._client.id]);
             this._buffer.broadcast = {};
         }
     }

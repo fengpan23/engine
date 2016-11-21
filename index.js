@@ -16,8 +16,8 @@ class Index extends Event{
         this._clients = new Map();
     }
 
-    start(opt) {
-        let server = Connect.createServer(opt);
+    start(options) {
+        let server = Connect.createServer(options);
         let CreateRequest = (client, content) => {
             let request = new Request(client, content);
             request.on('broadcast', this.broadcast.bind(this));
@@ -44,8 +44,8 @@ class Index extends Event{
     /**
      * broadcast data
      * @param content
-     * @param omit  {array} omit client ids (除去这些client id)
-     * @param limit  {array} limit client ids  (只发送这些client)
+     * @param [omit]  {array} omit client ids (除去这些client id)
+     * @param [limit] {array} limit client ids  (只发送这些client)
      */
     broadcast(content, omit, limit){
         let data = Translate.packBroadcast(content);
