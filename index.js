@@ -46,9 +46,10 @@ class Index extends Event{
      * @param content
      * @param [omit]  {array} omit client ids (除去这些client id)
      * @param [limit] {array} limit client ids  (只发送这些client)
+     * @param event
      */
-    broadcast(content, omit, limit){
-        let data = Translate.packBroadcast(content);
+    broadcast(event, content, omit, limit){
+        let data = Translate.packBroadcast(content, event);
         if(_.isArray(limit)){
             for(let id in limit)
                 this._clients.has(id) && this._clients.get(id).send(data);
