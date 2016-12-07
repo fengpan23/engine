@@ -16,21 +16,24 @@ class Index extends Event{
         this._clients = new Map();
     }
 
-    start(options) {
-        let server = Connect.createServer(options);
-        let CreateRequest = (client, content) => {
+    _createRequest(client, content){
+        if(content.event){
             let request = new Request(client, content);
             request.on('broadcast', this.broadcast.bind(this));
             return request;
-        };
+        }
+        throw new Error('event can not empty');
+    }
 
+    start(options) {
+        let server = Connect.createServer(options);
         server.on('connected', client => {
             client.on('data', content => {
-                this.emit('request', CreateRequest(client, content));
+                this.emit('request', this._createRequest(client, content));
             }).on('reconnect', () => {
                 //TODO: need replace socket ???
                 let content = {event: 'reconnect'};
-                this.emit('request', CreateRequest(client, content));
+                this.emit('request', this._createRequest(client, content));
             });
             this._clients.set(client.id, client);
         }).on('disconnect', id => {
@@ -79,6 +82,11 @@ class Index extends Event{
             return this._clients.get(ids);
         }
         return [...this._clients.values()];
+    }
+
+    createRequest(id, content){
+        if(this._clients.has(id))
+            return this._createRequest(this._clients.get(id), content);
     }
 
     close(){
