@@ -20,6 +20,6 @@
   "dependencies": {
     "underscore": "^1.8.3",
     "log": "https://github.com/fengpan23/log.git",
-    "connect": "https://github.com/fengpan23/connect.git"
+    "multi-connect": "^1.0.0"
   }
 }

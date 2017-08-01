@@ -4,7 +4,7 @@
 "use strict";
 const _ = require('underscore');
 const Event = require('events');
-const Connect = require('connect');
+const Connect = require('multi-connect');
 
 const Log = require('log')({develop: true});    //create global log
 const Translate = require('./libs/translate');
